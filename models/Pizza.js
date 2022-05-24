@@ -1,7 +1,7 @@
 // Importing the Schema constructor and model function
 const { Schema, model } = require("mongoose");
 
-const pizzaSchema = new Schema({
+const PizzaSchema = new Schema({
   pizzaName: {
     // get to use javascript data types.
     type: String,
