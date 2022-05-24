@@ -9,6 +9,19 @@ const pizzaController = {
   getAllPizza(req, res) {
     // use mongooses find method on the Pizza model and returns a promise
     Pizza.find({})
+      // method to populate our field with comments
+      // we need to pass the method an object with a key path and value of the field you
+      // want populated
+      // We use select to select the __v property and put a minus sign to tell mongo we dont
+      // care about that.
+      .populate({
+        path: "comments",
+        select: "-__v",
+      })
+      // doing the same as above but this is for the pizza model
+      .select("-__v")
+      // sorts in descending order by id so that we get the newest created pizza on top
+      .sort({ _id: -1 })
       .then((dbPizzaData) => res.json(dbPizzaData))
       .catch((err) => {
         console.log(err);
@@ -20,6 +33,11 @@ const pizzaController = {
   // out of the request we just need the params to get the id
   getPizzaById({ params }, res) {
     Pizza.findOne({ _id: params.id })
+      .populate({
+        path: "comments",
+        select: "-__v",
+      })
+      .select("-__v")
       .then((dbPizzaData) => {
         // If no pizza is found, send 404
         if (!dbPizzaData) {
